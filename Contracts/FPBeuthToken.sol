@@ -178,5 +178,30 @@ contract FPBeuthToken is owned, TokenERC20 {
     function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol) 
         TokenERC20(initialSupply, tokenName, tokenSymbol) public {}
         
+    //TODO Hashmap für Investoren/Werbung
+        
+    mapping (address => uint256) public userBalance;
+    
+    function buyAdvert(string url) public {}
+    
+    function getAdvertValue(string url) public constant returns (uint256 value){}
+    
+    function charge(uint256 percentCharged, string advertWatched) public {
+        require(percentCharged + userBalance[msg.sender] > userBalance[msg.sender]);
+        userBalance[msg.sender] += percentCharged/100;
+        
+        //TODO Check und Abzug von der Werbung
+    }
+    
+    function getAdvert() public constant returns (string advertUrl) {}
+    
+    function getCoinCount() public constant returns (uint256 coinCount) {
+                return userBalance[msg.sender];
+    }
+    
+    function buyGood(uint value) public returns (bool success) {
+        require(userBalance[msg.sender] >= value);
+        userBalance[msg.sender] -= value;
+    }
     
 }
