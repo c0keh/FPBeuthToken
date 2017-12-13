@@ -177,14 +177,72 @@ contract FPBeuthToken is owned, TokenERC20 {
     
     function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol) 
         TokenERC20(initialSupply, tokenName, tokenSymbol) public {}
-        
-    //TODO Hashmap für Investoren/Werbung
+
+    uint256 public sellPrice;
+    uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
+
+    function setPrices(uint256 newSellPrice, uint256 newBuyPrice) onlyOwner {
+        sellPrice = newSellPrice;
+        buyPrice = newBuyPrice;
+    }
+
+    //Der Investor kann für Ether unsere Tokens kaufen
+    //Um die Werbung zu kaufen, gibt es eine eigene Methode buyAdvert() siehe weiter unten
+    function buy() payable returns (uint amount){
+        amount = msg.value / buyPrice;                    // calculates the amount
+        require(balanceOf[this] >= amount);               // checks if it has enough to sell
+        balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
+        balanceOf[this] -= amount;                        // subtracts amount from seller's balance
+        Transfer(this, msg.sender, amount);               // execute an event reflecting the change
+        return amount;                                    // ends function and returns
+    }
+    //für unseren Fall wahrscheinlich erstmal nicht notwendig
+    function sell(uint amount) returns (uint revenue){
+        require(balanceOf[msg.sender] >= amount);         // checks if the sender has enough to sell
+        balanceOf[this] += amount;                        // adds the amount to owner's balance
+        balanceOf[msg.sender] -= amount;                  // subtracts the amount from seller's balance
+        revenue = amount * sellPrice;
+        require(msg.sender.send(revenue));                // sends ether to the seller: it's important to do this last to prevent recursion attacks
+        Transfer(msg.sender, this, amount);               // executes an event reflecting on the change
+        return revenue;                                   // ends function and returns
+    }
+
+
+
+
         
     mapping (address => uint256) public userBalance;
+    mapping (address => uint256) public investorBalance;
+    // für jede Adresse(eigentlich nur Investoren) gib es ein Advertisement
+    mapping (address => Advertisement) public advert;
+
+    // werbung besteht aus url und value
+    struct Advertisement {
+        string url;
+        uint256 value;
+    }
+    // ist jetzt direkt in der Methode buyAdvert oder doch in eigener Methode??
+   /* //hier werden die Werte der Werbung festgelegt
+    function setAdvert(string url) {
+        advert[msg.sender].url=url;
+        advert[msg.sender].value=getAdvertValue(url);
+
+
+    }*/
+    //Der Investor kauft Werbung; er übergibt einen String mit der Url; damit wird die Werbung gesetzt;
+    //Der Wert der Werbung wird von der InvestorBalance abgezogen und wird der TokenBalance gutgeschrieben
+    //braucht man hier am Ende noch ein Transfer-Event
+    function buyAdvert (string url) public {
+        advert[msg.sender].url=url;
+        advert[msg.sender].value=getAdvertValue(url);
+        investorBalance[msg.sender] -= advert[msg.sender].value;
+        balanceOf[this] += advert[msg.sender].value;
+
+    }
     
-    function buyAdvert(string url) public {}
-    
-    function getAdvertValue(string url) public constant returns (uint256 value){}
+    function getAdvertValue(string url) public constant returns (uint256 value){
+
+    }
     
     function charge(uint256 percentCharged, string advertWatched) public {
         require(percentCharged + userBalance[msg.sender] > userBalance[msg.sender]);
@@ -193,7 +251,9 @@ contract FPBeuthToken is owned, TokenERC20 {
         //TODO Check und Abzug von der Werbung
     }
     
-    function getAdvert() public constant returns (string advertUrl) {}
+    function getAdvert() public constant returns (string advertUrl) {
+
+    }
     
     function getCoinCount() public constant returns (uint256 coinCount) {
                 return userBalance[msg.sender];
