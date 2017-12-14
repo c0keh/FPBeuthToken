@@ -232,16 +232,17 @@ contract FPBeuthToken is owned, TokenERC20 {
     //Der Investor kauft Werbung; er übergibt einen String mit der Url; damit wird die Werbung gesetzt;
     //Der Wert der Werbung wird von der InvestorBalance abgezogen und wird der TokenBalance gutgeschrieben
     //braucht man hier am Ende noch ein Transfer-Event
-    function buyAdvert (string url) public {
+    function buyAdvert (string url, uint256 valueInFC) public {
+        require(investorBalance[msg.sender] >= valueInFC);//preueft wallet zahlbarkeit automatisch? dann require unnötig
         advert[msg.sender].url=url;
-        advert[msg.sender].value=getAdvertValue(url);
+        advert[msg.sender].value=valueInFC;
         investorBalance[msg.sender] -= advert[msg.sender].value;
         balanceOf[this] += advert[msg.sender].value;
 
     }
     
     function getAdvertValue(string url) public constant returns (uint256 value){
-
+            return advert[msg.sender].value;
     }
     
     function charge(uint256 percentCharged, string advertWatched) public {
@@ -252,7 +253,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     }
     
     function getAdvert() public constant returns (string advertUrl) {
-
+        //auf welche weise advert abrufen?
     }
     
     function getCoinCount() public constant returns (uint256 coinCount) {
