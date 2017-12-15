@@ -181,7 +181,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     uint256 public sellPrice;
     uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
 
-    function setPrices(uint256 newSellPrice, uint256 newBuyPrice) onlyOwner {
+    function setPrices(uint256 newSellPrice, uint256 newBuyPrice) {
         sellPrice = newSellPrice;
         buyPrice = newBuyPrice;
     }
@@ -190,7 +190,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     //Um die Werbung zu kaufen, gibt es eine eigene Methode buyAdvert() siehe weiter unten
     function buy() payable returns (uint amount){
         amount = msg.value / buyPrice;                    // calculates the amount
-        require(balanceOf[this] >= amount);               // checks if it has enough to sell
+       // require(balanceOf[this] >= amount);               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
         balanceOf[this] -= amount;                        // subtracts amount from seller's balance
         Transfer(this, msg.sender, amount);               // execute an event reflecting the change
@@ -238,6 +238,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         advert[msg.sender].value=valueInFC;
         investorBalance[msg.sender] -= advert[msg.sender].value;
         balanceOf[this] += advert[msg.sender].value;
+        Transfer(msg.sender, this, valueInFC);
 
     }
     
@@ -266,3 +267,4 @@ contract FPBeuthToken is owned, TokenERC20 {
     }
     
 }
+
