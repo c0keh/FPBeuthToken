@@ -175,96 +175,109 @@ contract TokenERC20 {
 
 contract FPBeuthToken is owned, TokenERC20 {
     
-    function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol) 
-        TokenERC20(initialSupply, tokenName, tokenSymbol) public {}
-
     uint256 public sellPrice;
     uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
-
-    function setPrices(uint256 newSellPrice, uint256 newBuyPrice) {
-        sellPrice = newSellPrice;
-        buyPrice = newBuyPrice;
-    }
-
-    //Der Investor kann für Ether unsere Tokens kaufen
-    //Um die Werbung zu kaufen, gibt es eine eigene Methode buyAdvert() siehe weiter unten
-    function buy() payable returns (uint amount){
-        amount = msg.value / buyPrice;                    // calculates the amount
-       // require(balanceOf[this] >= amount);               // checks if it has enough to sell
-        balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
-        balanceOf[this] -= amount;                        // subtracts amount from seller's balance
-        Transfer(this, msg.sender, amount);               // execute an event reflecting the change
-        return amount;                                    // ends function and returns
-    }
-    //für unseren Fall wahrscheinlich erstmal nicht notwendig
-    function sell(uint amount) returns (uint revenue){
-        require(balanceOf[msg.sender] >= amount);         // checks if the sender has enough to sell
-        balanceOf[this] += amount;                        // adds the amount to owner's balance
-        balanceOf[msg.sender] -= amount;                  // subtracts the amount from seller's balance
-        revenue = amount * sellPrice;
-        require(msg.sender.send(revenue));                // sends ether to the seller: it's important to do this last to prevent recursion attacks
-        Transfer(msg.sender, this, amount);               // executes an event reflecting on the change
-        return revenue;                                   // ends function and returns
-    }
-
-
-
-
-        
+    uint256 public globalAdvertId; // temporär genutzt für die advertId-"Generierung"
+    
     mapping (address => uint256) public userBalance;
-    mapping (address => uint256) public investorBalance;
-    // für jede Adresse(eigentlich nur Investoren) gib es ein Advertisement
-    mapping (address => Advertisement) public advert;
+    mapping (uint256 => Advertisement) public adverts;  
 
-    // werbung besteht aus url und value
+    event Shop(address indexed from, uint256 value, uint256 newBalance);
+    event Charge(address indexed from, uint256 percentCharged, uint256 newBalance);
+    event AddAdvertisement(address indexed from, uint256 advertId, uint256 value);
+
+    function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol) 
+        TokenERC20(initialSupply, tokenName, tokenSymbol) public {
+            globalAdvertId = 0;
+            sellPrice = 1;
+            buyPrice = 1;
+        }
+        
+    // Repräsentation einer Werbung
     struct Advertisement {
+        address adOwner;
         string url;
         uint256 value;
     }
-    // ist jetzt direkt in der Methode buyAdvert oder doch in eigener Methode??
-   /* //hier werden die Werte der Werbung festgelegt
-    function setAdvert(string url) {
-        advert[msg.sender].url=url;
-        advert[msg.sender].value=getAdvertValue(url);
 
+    function setSellPrice(uint256 newSellPrice) public onlyOwner{
+        require(newSellPrice > 0);
+        sellPrice = newSellPrice;
+    }
+    
+    function setBuyPrice(uint256 newBuyPrice) public onlyOwner{
+        require(newBuyPrice > 0);
+        buyPrice = newBuyPrice;
+    }
+    
 
-    }*/
+    //Der Investor kann für Ether unsere Tokens kaufen
+    function buy() public payable returns (uint amount){
+        amount = msg.value / buyPrice;                    // calculates the amount
+        require(balanceOf[owner] >= amount);               // checks if it has enough to sell
+        balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
+        balanceOf[owner] -= amount;                        // subtracts amount from seller's balance
+        Transfer(owner, msg.sender, amount);               // execute an event reflecting the change
+        return amount;                                    // ends function and returns
+    }
+    
+    //für unseren Fall wahrscheinlich erstmal nicht notwendig
+    function sell(uint amount) public returns (uint revenue){
+        require(balanceOf[msg.sender] >= amount);         // checks if the sender has enough to sell
+        balanceOf[owner] += amount;                        // adds the amount to owner's balance
+        balanceOf[msg.sender] -= amount;                  // subtracts the amount from seller's balance
+        revenue = amount * sellPrice;
+        require(msg.sender.send(revenue));                // sends ether to the seller: it's important to do this last to prevent recursion attacks
+        Transfer(msg.sender, owner, amount);               // executes an event reflecting on the change
+        return revenue;                                   // ends function and returns
+    }
+
     //Der Investor kauft Werbung; er übergibt einen String mit der Url; damit wird die Werbung gesetzt;
-    //Der Wert der Werbung wird von der InvestorBalance abgezogen und wird der TokenBalance gutgeschrieben
+    //Der Wert der Werbung wird von der balanceOf abgezogen und wird der Werbung gutgeschrieben
     //braucht man hier am Ende noch ein Transfer-Event
-    function buyAdvert (string url, uint256 valueInFC) public {
-        require(investorBalance[msg.sender] >= valueInFC);//preueft wallet zahlbarkeit automatisch? dann require unnötig
-        advert[msg.sender].url=url;
-        advert[msg.sender].value=valueInFC;
-        investorBalance[msg.sender] -= advert[msg.sender].value;
-        balanceOf[this] += advert[msg.sender].value;
-        Transfer(msg.sender, this, valueInFC);
-
+    function addAdvert (string advertUrl, uint256 fluxCoins) public returns (uint256 advertId) {
+        require (balanceOf[owner] + fluxCoins > balanceOf[owner]);
+        require(balanceOf[msg.sender] >= fluxCoins); //prueft wallet zahlbarkeit automatisch? dann require unnötig
+        require (globalAdvertId + 1 > globalAdvertId);
+        adverts[globalAdvertId] = Advertisement({adOwner: msg.sender, url: advertUrl, value: fluxCoins});
+        balanceOf[msg.sender] -= fluxCoins;
+        balanceOf[owner] += fluxCoins;
+        AddAdvertisement(msg.sender, advertId, fluxCoins);  // Event beim Hinzufügen
+        globalAdvertId++;
+        return advertId;
     }
     
-    function getAdvertValue(string url) public constant returns (uint256 value){
-            return advert[msg.sender].value;
+    function getAdvertValue(uint256 advertId) public constant returns (uint256 value){
+        require(adverts[advertId].adOwner == msg.sender || msg.sender == owner); 
+            return adverts[advertId].value;
     }
     
-    function charge(uint256 percentCharged, string advertWatched) public {
+    function charge(uint256 percentCharged, uint256 advertId) public {
         require(percentCharged + userBalance[msg.sender] > userBalance[msg.sender]);
-        userBalance[msg.sender] += percentCharged/100;
-        
-        //TODO Check und Abzug von der Werbung
+        userBalance[msg.sender] += percentCharged;
+        adverts[advertId].value -= percentCharged;
     }
     
-    function getAdvert() public constant returns (string advertUrl) {
-        //auf welche weise advert abrufen?
+    function getAdvert() public constant returns (uint256, string) {
+        // TODO "schlaue" Wahl eines Adverts
+        require(adverts[0].value > 0);
+        return (0, adverts[0].url);
     }
     
-    function getCoinCount() public constant returns (uint256 coinCount) {
-                return userBalance[msg.sender];
+    function getMyUserBalance() public constant returns (uint256 coinCount) {
+        return userBalance[msg.sender];
     }
     
-    function buyGood(uint value) public returns (bool success) {
-        require(userBalance[msg.sender] >= value);
+    function getMyInvestorBalance() public constant returns (uint256 coinCount) {
+        return balanceOf[msg.sender];
+    }
+    
+    function buyGood(uint value) public {
+        require(userBalance[msg.sender] - value < userBalance[msg.sender]);
+        require(userBalance[msg.sender] - value >= 0);
+        require(balanceOf[owner] + value > balanceOf[owner]);
         userBalance[msg.sender] -= value;
+        balanceOf[owner] += value;
+        Shop(msg.sender, value, balanceOf[msg.sender]);
     }
-    
 }
-
