@@ -243,6 +243,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         balanceOf[msg.sender] -= fluxCoins;
         balanceOf[owner] += fluxCoins;
         AddAdvertisement(msg.sender, advertId, fluxCoins);  // Event beim Hinzufügen
+        advertId = globalAdvertId;
         globalAdvertId++;
         return advertId;
     }
@@ -256,6 +257,9 @@ contract FPBeuthToken is owned, TokenERC20 {
         require(percentCharged + userBalance[msg.sender] > userBalance[msg.sender]);
         userBalance[msg.sender] += percentCharged;
         adverts[advertId].value -= percentCharged;
+        if(adverts[advertId].value <= 0){
+            delete adverts[advertId];
+        }
     }
     
     function getAdvert() public constant returns (uint256, string) {
