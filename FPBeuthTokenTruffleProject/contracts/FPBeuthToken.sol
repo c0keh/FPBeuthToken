@@ -15,6 +15,7 @@ contract owned {
     function transferOwnership(address newOwner) onlyOwner public {
         owner = newOwner;
     }
+
     function getOwner() public constant returns (address Owner) {
         return owner;
     }
@@ -54,14 +55,6 @@ contract TokenERC20 {
         balanceOf[msg.sender] = totalSupply;                // Give the creator all initial tokens
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
-    }
-    
-    function getTokenName() public constant returns (string Tokenname) {
-        return name;
-    }
-    
-    function getTotalSupply() public constant returns (uint256 TotalSupply) {
-        return totalSupply;
     }
 
     /**
@@ -122,7 +115,7 @@ contract TokenERC20 {
      * @param _value the max amount they can spend
      */
     function approve(address _spender, uint256 _value) public
-        returns (bool success) {
+    returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         return true;
     }
@@ -137,8 +130,8 @@ contract TokenERC20 {
      * @param _extraData some extra information to send to the approved contract
      */
     function approveAndCall(address _spender, uint256 _value, bytes _extraData)
-        public
-        returns (bool success) {
+    public
+    returns (bool success) {
         tokenRecipient spender = tokenRecipient(_spender);
         if (approve(_spender, _value)) {
             spender.receiveApproval(msg.sender, _value, this, _extraData);
@@ -185,25 +178,27 @@ contract TokenERC20 {
 /******************************************/
 
 contract FPBeuthToken is owned, TokenERC20 {
-    
+
     uint256 public sellPrice;
     uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
-    uint256 public globalAdvertId; // temporär genutzt für die advertId-"Generierung"
-    
+    uint64 public emptyAdvertId; // index where free place in array
+    uint64 public watchAdvertId; // index which advert to watch in array
+
     mapping (address => uint256) public userBalance;
-    mapping (uint256 => Advertisement) public adverts;  
+    Advertisement[] adverts = new Advertisement[](2**64);
 
     event Shop(address indexed from, uint256 value, uint256 newBalance);
     event Charge(address indexed from, uint256 percentCharged, uint256 newBalance);
-    event AddAdvertisement(address indexed from, uint256 advertId, uint256 value);
+    event AddAdvertisement(address indexed from, uint64 advertId, uint256 value);
 
-    function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol) 
-        TokenERC20(initialSupply, tokenName, tokenSymbol) public {
-            globalAdvertId = 0;
-            sellPrice = 1;
-            buyPrice = 1;
-        }
-        
+    function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol)
+    TokenERC20(initialSupply, tokenName, tokenSymbol) public {
+        emptyAdvertId = 0;
+        watchAdvertId = 0;
+        sellPrice = 1;
+        buyPrice = 1;
+    }
+
     // Repräsentation einer Werbung
     struct Advertisement {
         address adOwner;
@@ -215,15 +210,15 @@ contract FPBeuthToken is owned, TokenERC20 {
         require(newSellPrice > 0);
         sellPrice = newSellPrice;
     }
-    
+
     function setBuyPrice(uint256 newBuyPrice) public onlyOwner{
         require(newBuyPrice > 0);
         buyPrice = newBuyPrice;
     }
-    
+
 
     //Der Investor kann für Ether unsere Tokens kaufen
-    function buy() public payable returns (uint amount){
+    function buy() public payable returns (uint256 amount){
         amount = msg.value / buyPrice;                    // calculates the amount
         require(balanceOf[owner] >= amount);               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
@@ -231,9 +226,9 @@ contract FPBeuthToken is owned, TokenERC20 {
         Transfer(owner, msg.sender, amount);               // execute an event reflecting the change
         return amount;                                    // ends function and returns
     }
-    
+
     //für unseren Fall wahrscheinlich erstmal nicht notwendig
-    function sell(uint amount) public returns (uint revenue){
+    function sell(uint256 amount) public returns (uint256 revenue){
         require(balanceOf[msg.sender] >= amount);         // checks if the sender has enough to sell
         balanceOf[owner] += amount;                        // adds the amount to owner's balance
         balanceOf[msg.sender] -= amount;                  // subtracts the amount from seller's balance
@@ -246,53 +241,62 @@ contract FPBeuthToken is owned, TokenERC20 {
     //Der Investor kauft Werbung; er übergibt einen String mit der Url; damit wird die Werbung gesetzt;
     //Der Wert der Werbung wird von der balanceOf abgezogen und wird der Werbung gutgeschrieben
     //braucht man hier am Ende noch ein Transfer-Event
-    function addAdvert (string advertUrl, uint256 fluxCoins) public returns (uint256 advertId) {
-        require (balanceOf[owner] + fluxCoins > balanceOf[owner]);
+    function addAdvert (string advertUrl, uint256 fluxCoins) public returns (uint64 advertId) {
+        require(balanceOf[owner] + fluxCoins > balanceOf[owner]);
         require(balanceOf[msg.sender] >= fluxCoins); //prueft wallet zahlbarkeit automatisch? dann require unnötig
-        require (globalAdvertId + 1 > globalAdvertId);
-        adverts[globalAdvertId] = Advertisement({adOwner: msg.sender, url: advertUrl, value: fluxCoins});
+        require(emptyAdvertId + 1 != watchAdvertId);
+
+        adverts[emptyAdvertId] = Advertisement({adOwner: msg.sender, url: advertUrl, value: fluxCoins});
+        advertId = emptyAdvertId;
+        emptyAdvertId++;
         balanceOf[msg.sender] -= fluxCoins;
         balanceOf[owner] += fluxCoins;
+
         AddAdvertisement(msg.sender, advertId, fluxCoins);  // Event beim Hinzufügen
-        advertId = globalAdvertId;
-        globalAdvertId++;
         return advertId;
     }
-    
-    function getAdvertValue(uint256 advertId) public constant returns (uint256 value){
-        require(adverts[advertId].adOwner == msg.sender || msg.sender == owner); 
-            return adverts[advertId].value;
+
+    function getAdvertValue(uint64 advertId) public constant returns (uint256 value){
+        require(adverts[advertId].adOwner == msg.sender || msg.sender == owner);
+        return adverts[advertId].value;
     }
-    
-    function charge(uint256 percentCharged, uint256 advertId) public {
-        require(percentCharged + userBalance[msg.sender] > userBalance[msg.sender]);
-        userBalance[msg.sender] += percentCharged;
-        adverts[advertId].value -= percentCharged;
-        if(adverts[advertId].value <= 0){
+
+    function charge(uint8 minCharged, uint64 advertId) public {
+        uint256 chargedValue = minCharged * 1;
+        require(chargedValue + userBalance[msg.sender] > userBalance[msg.sender]);
+        require(advertId == watchAdvertId);
+        require(adverts[watchAdvertId].value > 0);
+
+        uint256 previousAdvertValue = adverts[advertId].value;
+        userBalance[msg.sender] += chargedValue;
+        adverts[advertId].value -= chargedValue;
+
+        if(adverts[advertId].value == 0 || adverts[advertId].value > previousAdvertValue){
             delete adverts[advertId];
+            watchAdvertId++;
         }
     }
-    
-    function getAdvert() public constant returns (uint256, string) {
-        // TODO "schlaue" Wahl eines Adverts
-        require(adverts[0].value > 0);
-        return (0, adverts[0].url);
+
+    function getAdvert() public constant returns (uint64, string) {
+        require(watchAdvertId != emptyAdvertId);
+        require(adverts[watchAdvertId].value > 0);
+        return (watchAdvertId, adverts[watchAdvertId].url);
     }
-    
+
     function getMyUserBalance() public constant returns (uint256 coinCount) {
         return userBalance[msg.sender];
     }
-    
+
     function getMyInvestorBalance() public constant returns (uint256 coinCount) {
         return balanceOf[msg.sender];
     }
-    
-    function buyGood(uint value) public {
+
+    function buyGood(uint256 value) public {
         require(userBalance[msg.sender] - value < userBalance[msg.sender]);
         require(userBalance[msg.sender] - value >= 0);
-        require(balanceOf[owner] + value > balanceOf[owner]);
+
         userBalance[msg.sender] -= value;
-        balanceOf[owner] += value;
-        Shop(msg.sender, value, balanceOf[msg.sender]);
+
+        Shop(msg.sender, value, userBalance[msg.sender]);
     }
 }
