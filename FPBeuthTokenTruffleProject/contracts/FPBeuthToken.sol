@@ -15,6 +15,9 @@ contract owned {
     function transferOwnership(address newOwner) onlyOwner public {
         owner = newOwner;
     }
+    function getOwner() public constant returns (address Owner) {
+        return owner;
+    }
 }
 
 interface tokenRecipient { function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) public; }
@@ -51,6 +54,14 @@ contract TokenERC20 {
         balanceOf[msg.sender] = totalSupply;                // Give the creator all initial tokens
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
+    }
+    
+    function getTokenName() public constant returns (string Tokenname) {
+        return name;
+    }
+    
+    function getTotalSupply() public constant returns (uint256 TotalSupply) {
+        return totalSupply;
     }
 
     /**
