@@ -196,7 +196,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     Advertisement[] adverts = new Advertisement[](2**64);
 
     event Shop(address indexed from, uint256 value, uint256 newBalance);
-    event Charge(address indexed from, uint256 percentCharged, uint256 newBalance);
+    event Charge(address indexed from, uint256 chargedValue, uint256 newBalance);
     event AddAdvertisement(address indexed from, uint64 advertId, uint256 value);
 
     function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol)
@@ -283,6 +283,7 @@ contract FPBeuthToken is owned, TokenERC20 {
             delete adverts[advertId];
             watchAdvertId++;
         }
+        Charge(msg.sender, chargedValue, userBalance[msg.sender]);
     }
 
     function getAdvert() public constant returns (uint64, string) {
