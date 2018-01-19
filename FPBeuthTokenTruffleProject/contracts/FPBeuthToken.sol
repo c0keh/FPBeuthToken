@@ -56,6 +56,14 @@ contract TokenERC20 {
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
     }
+    
+    function getTokenName() public constant returns (string Tokenname) {
+         return name;
+     }
+     
+     function getTotalSupply() public constant returns (uint256 TotalSupply) {
+         return totalSupply;
+     }
 
     /**
      * Internal transfer, only can be called by this contract
