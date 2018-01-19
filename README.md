@@ -2,13 +2,14 @@
   
   
 ## TODO 
-- owner und balanceOf[owner] (Hauptkonto) voneinander trennen, sonst Probleme nach transferOwnership(...)
-- zeiger auf anzuzeigende werbung implementieren, zeiger auf freie werbung darf ihn nicht überholen
+- owner und balanceOf[owner] (Hauptkonto) voneinander trennen, sonst Probleme nach transferOwnership(...) 
+- zeiger auf anzuzeigende werbung TESTEN
 
 
 
 erledigt:
 
+- zeiger auf anzuzeigende werbung implementieren, zeiger auf freie werbung darf ihn nicht überholen
 - implementieren: Liste/HashMap für die User (address, balance)
 - implementieren: getCoinCount() const returns (uint coinCount) {}
 - implementieren: buyAdvert(string url) payable {}
