@@ -2,13 +2,28 @@
   
   
 ## TODO 
-- owner und balanceOf[owner] (Hauptkonto) voneinander trennen, sonst Probleme nach transferOwnership(...) 
+
 - zeiger auf anzuzeigende werbung TESTEN
 - alles ausführlich testen
 - sinnvolle Kommentare
 - contracts in mehrere dateien trennen?
 
+Web3:
+- Investor-Account erstellen
+- Investor kauft für Ether eine bestimmte Anzahl von Tokens
+- Veränderung in der Balanceof Investor und Token-Contract anzeigen
+- Investor fügt Werbung mit bestimmten Wert hinzu
+- Veränderung in der Balanceof Investor und Token-Contract anzeigen und die Advertisement-Liste anzeigen
 
+- User-Account erstellen
+- User lädt sein Handy für eine bestimmte Zeit und konsumiert dabei Werbung
+- Veränderung in der Balanceof User und Token-Contract anzeigen und die Advertisement-Liste anzeigen
+
+Abschlusspräsentation:
+- siehe Google-Drive
+
+zurückgestellt:
+- owner und balanceOf[owner] (Hauptkonto) voneinander trennen, sonst Probleme nach transferOwnership(...)
 
 erledigt:
 
