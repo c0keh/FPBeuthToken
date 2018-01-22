@@ -189,15 +189,15 @@ contract FPBeuthToken is owned, TokenERC20 {
 
     uint256 public sellPrice;
     uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
-    uint64 public emptyAdvertId; // index where free place in array
-    uint64 public watchAdvertId; // index which advert to watch in array
+    uint256 public emptyAdvertId; // index where free place in array
+    uint256 public watchAdvertId; // index which advert to watch in array
 
     mapping (address => uint256) public userBalance;
-    Advertisement[] adverts = new Advertisement[](2**64);
+    mapping (uint256 => Advertisement) public adverts;
 
     event Shop(address indexed from, uint256 value, uint256 newBalance);
     event Charge(address indexed from, uint256 chargedValue, uint256 newBalance);
-    event AddAdvertisement(address indexed from, uint64 advertId, uint256 value);
+    event AddAdvertisement(address indexed from, uint256 advertId, uint256 value);
 
     function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol)
     TokenERC20(initialSupply, tokenName, tokenSymbol) public {
@@ -249,7 +249,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     //Der Investor kauft Werbung; er übergibt einen String mit der Url; damit wird die Werbung gesetzt;
     //Der Wert der Werbung wird von der balanceOf abgezogen und wird der Werbung gutgeschrieben
     //braucht man hier am Ende noch ein Transfer-Event
-    function addAdvert (string advertUrl, uint256 fluxCoins) public returns (uint64 advertId) {
+    function addAdvert (string advertUrl, uint256 fluxCoins) public returns (uint256 advertId) {
         require(balanceOf[owner] + fluxCoins > balanceOf[owner]);
         require(balanceOf[msg.sender] >= fluxCoins); //prueft wallet zahlbarkeit automatisch? dann require unnötig
         require(emptyAdvertId + 1 != watchAdvertId);
@@ -264,12 +264,12 @@ contract FPBeuthToken is owned, TokenERC20 {
         return advertId;
     }
 
-    function getAdvertValue(uint64 advertId) public constant returns (uint256 value){
+    function getAdvertValue(uint256 advertId) public constant returns (uint256 value){
         require(adverts[advertId].adOwner == msg.sender || msg.sender == owner);
         return adverts[advertId].value;
     }
 
-    function charge(uint8 minCharged, uint64 advertId) public {
+    function charge(uint8 minCharged, uint256 advertId) public {
         uint256 chargedValue = minCharged * 1;
         require(chargedValue + userBalance[msg.sender] > userBalance[msg.sender]);
         require(advertId == watchAdvertId);
@@ -286,7 +286,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         Charge(msg.sender, chargedValue, userBalance[msg.sender]);
     }
 
-    function getAdvert() public constant returns (uint64, string) {
+    function getAdvert() public constant returns (uint256, string) {
         require(watchAdvertId != emptyAdvertId);
         require(adverts[watchAdvertId].value > 0);
         return (watchAdvertId, adverts[watchAdvertId].url);
