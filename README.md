@@ -4,6 +4,9 @@
 ## TODO 
 - owner und balanceOf[owner] (Hauptkonto) voneinander trennen, sonst Probleme nach transferOwnership(...) 
 - zeiger auf anzuzeigende werbung TESTEN
+- alles ausführlich testen
+- sinnvolle Kommentare
+- contracts in mehrere dateien trennen?
 
 
 
