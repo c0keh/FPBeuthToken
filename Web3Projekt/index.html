@@ -44,7 +44,7 @@
             //Der Investor kann für Ether Tokens kaufen
             function buyTokens(account) {
                     //var value = contract_instance.buy({from: web3.eth.accounts[account], value: document.getElementById('value').value
-                    web3.personal.unlockAccount(web3.eth.accounts[account], 'pwadO9P1m');
+                    web3.personal.unlockAccount(web3.eth.accounts[account], 'test1234');
                     contract_instance.buy({from: web3.eth.accounts[account], value: document.getElementById('value').value}, function(error, result) {
                         if(error) {
                             console.error(error);
@@ -75,7 +75,8 @@
             
             function getTokenBalance(id, account) {
                 //document.getElementById(id).innerText = getBalance(document.getElementById('value').value, account);
-                document.getElementById(id).innerText = getBalance(document.getElementById('value').value, web3.eth.accounts[account]);
+                 web3.eth.getBalance(web3.eth.accounts[account], function (error, balance) {
+                    document.getElementById(id).innerText = web3.fromWei(balance, "ether"); });
             }
         </script>
     </head>
@@ -105,7 +106,7 @@
             zu kaufende Menge: <input type="text" id="value" name="Tokens" value=""><br> 
         </form>
         <button onclick="buyTokens(1)">Submit</button>
-        <button onclick="getTokenBalance(tokenBalance, 1)">Update Token Balance</button>
+        <button onclick="getTokenBalance('tokenBalance', 1)">Update Token Balance</button>
         Investor token Balance:<span id="tokenBalance"></span>
     </body>
 </html>
