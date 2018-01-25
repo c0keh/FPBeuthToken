@@ -1,66 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FluxCoin</title>
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="indexStyle.css" />
-    <script src="./node_modules/web3/dist/web3.js"></script>
-    <script type="text/javascript" src="indexScript.js"></script>
-</head>
-<body>
-<h1>FluxCoin USER INTERFACES</h1>
-<section>
-    <h3>GLOBAL</h3>
-    <p>Alles was sich außerhalb abspielt (weder Investor noch User):</p>
-    <button id="getTokenNameButton">TokenName</button>
-    <span id="TokenName"></span> !
-    <button id="getTokenOwnerButton">TokenOwner</button>
-    <span id="TokenOwner"></span> Ethereum-Adresse
-    <button id="getTotalSupplyButton">totalSupply</button>
-    <span id="TotalSupply"></span> TokensTotal
-</section>
+    <head>
+        <meta charset="UTF-8">
+        <title>myDapp</title>
+        <script src="./node_modules/web3/dist/web3.js"></script>
+<!--        <script type="text/javascript" src="indexScript.js"></script>          --> 
+        <link rel="stylesheet" href="styles.css">
+        <script type="text/javascript">
+            // This adress needs to be created new whenever the contract gets deployed
+            var contract_address = "0x9d7B060b68e0ac831397957a806B8f1CD10048Ee";            
+            // Stays the same until the solidity contract gets changed
+            var contract_abi = [ { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "userBalance", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "name", "outputs": [ { "name": "", "type": "string", "value": "Token2" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "value", "type": "uint256" } ], "name": "buyGood", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" } ], "name": "approve", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [ { "name": "", "type": "uint256", "value": "200000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "advertId", "type": "uint256" } ], "name": "getAdvertValue", "outputs": [ { "name": "value", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_from", "type": "address" }, { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "percentCharged", "type": "uint256" }, { "name": "advertId", "type": "uint256" } ], "name": "charge", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [ { "name": "", "type": "uint8", "value": "18" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_value", "type": "uint256" } ], "name": "burn", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "sellPrice", "outputs": [ { "name": "", "type": "uint256", "value": "1" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "advertUrl", "type": "string" }, { "name": "fluxCoins", "type": "uint256" } ], "name": "addAdvert", "outputs": [ { "name": "advertId", "type": "uint256" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "newBuyPrice", "type": "uint256" } ], "name": "setBuyPrice", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "balanceOf", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_from", "type": "address" }, { "name": "_value", "type": "uint256" } ], "name": "burnFrom", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getMyInvestorBalance", "outputs": [ { "name": "coinCount", "type": "uint256", "value": "200000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "buyPrice", "outputs": [ { "name": "", "type": "uint256", "value": "1" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getTokenName", "outputs": [ { "name": "Tokenname", "type": "string", "value": "Token2" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getOwner", "outputs": [ { "name": "Owner", "type": "address", "value": "0xe44beeb8fc50c003498841f2ff6d356b78886837" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0xe44beeb8fc50c003498841f2ff6d356b78886837" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [ { "name": "", "type": "string", "value": "TT2" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "buy", "outputs": [ { "name": "amount", "type": "uint256" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" } ], "name": "transfer", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "adverts", "outputs": [ { "name": "adOwner", "type": "address", "value": "0x0000000000000000000000000000000000000000" }, { "name": "url", "type": "string", "value": "" }, { "name": "value", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getTotalSupply", "outputs": [ { "name": "TotalSupply", "type": "uint256", "value": "200000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "globalAdvertId", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" }, { "name": "_extraData", "type": "bytes" } ], "name": "approveAndCall", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getAdvert", "outputs": [ { "name": "", "type": "uint256" }, { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" }, { "name": "", "type": "address" } ], "name": "allowance", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getMyUserBalance", "outputs": [ { "name": "coinCount", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "amount", "type": "uint256" } ], "name": "sell", "outputs": [ { "name": "revenue", "type": "uint256" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "newSellPrice", "type": "uint256" } ], "name": "setSellPrice", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "name": "initialSupply", "type": "uint256", "index": 0, "typeShort": "uint", "bits": "256", "displayName": "initial Supply", "template": "elements_input_uint", "value": "200" }, { "name": "tokenName", "type": "string", "index": 1, "typeShort": "string", "bits": "", "displayName": "token Name", "template": "elements_input_string", "value": "Token2" }, { "name": "tokenSymbol", "type": "string", "index": 2, "typeShort": "string", "bits": "", "displayName": "token Symbol", "template": "elements_input_string", "value": "TT2" } ], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }, { "indexed": false, "name": "newBalance", "type": "uint256" } ], "name": "Shop", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "percentCharged", "type": "uint256" }, { "indexed": false, "name": "newBalance", "type": "uint256" } ], "name": "Charge", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "advertId", "type": "uint256" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "AddAdvertisement", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "Burn", "type": "event" } ]
 
-<section>
-    <h3>INVESTOR</h3>
-    <p>Alles was vom Investor ausgeht hier rein:</p>
-    <button id="updateMyBalanceButton">Update my balance</button>
-    <span id="myBalance"></span> Ether
-    <button id="getBalanceInvestor1Button">Update balance von Investor 1:</button>
-    <span id="investor1"></span> Ether
-    <button id="buyTokensButton">buy</button>
-    <button id="getBalanceButton">Update Token Balance</button>
-    Investor token Balance:<span id="tokenBalance"></span>
-    <form>
-    zu kaufende Menge: <input type="text" id="value" name="Tokens" value=""><br>
-    </form>
-</section>
+           
+            window.onload=function() {
+                getBalance(0, 'myBalance');
+                getName();
+                getTotalSupply();
+                getTokenOwner();
+            }
+        
+            if (typeof web3 !== 'undefined') {
+                web3 = new Web3(web3.currentProvider);
+            } else {
+                // Sets the provider you want from Web3.providers
+                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            }
+            var contract_instance = web3.eth.contract(contract_abi).at(contract_address);
+            // Gets the name of the token
+            function getName() {
+                document.getElementById("TokenName").innerText = contract_instance.getTokenName();
+            }
+            // Gets the total supply of the token
+            function getTotalSupply() {
+                document.getElementById("TotalSupply").innerText = contract_instance.getTotalSupply();
+            }
+            // Gets the token owner
+            function getTokenOwner() {
+                document.getElementById("TokenOwner").innerText = contract_instance.getOwner();
+            }
+            // Gets the users balance
+            function getBalance(account, id) {
+                web3.eth.getBalance(web3.eth.accounts[account], function (error, balance) {
+                    document.getElementById(id).innerText = web3.fromWei(balance, "ether");
+                });
+            }         
+            // An investor buys tokens for ether
+            function buyTokens(account) {
+                document.getElementById("transaktion").innerText = "Transaktion wird bearbeitet.";
+                //clearInput('value');
+                    web3.personal.unlockAccount(web3.eth.accounts[account], 'pwadO9P1m');
+                    contract_instance.buy({from: web3.eth.accounts[account], value: document.getElementById('value').value}, function(error, result) {
+                        if(error) {
+                            console.error(error);
+                        } else {
+                            var txHash = result;
+                            console.log(txHash);
+                            //callWhenMined(txHash, getTokenBalance('tokenBalance', account));
+                            //callWhenMined(txHash, getTokenBalance);
+                            callWhenMined(txHash, function(error, result) {
+                                document.getElementById('tokenBalance').innerText = contract_instance.getMyInvestorBalance({from: web3.eth.accounts[1]});                   
+                            });
+                            callWhenMined2(txHash, getBalance);
+                        }
+                });
+            }
+            
+            function callWhenMined(txHash, callback) {
+                web3.eth.getTransactionReceipt(txHash, function(error, rcpt) {
+                    if(error) {
+                        console.error(error);
+                    } else {
+                        if(rcpt == null) {
+                            setTimeout(function() {
+                                callWhenMined(txHash, callback);
+                            }, 500);
+                        } else {
+                            document.getElementById("transaktion").innerText = "";               
+                            callback();
+                            //callback('tokenBalance', 1);
+                            clearInput('value');
+                        }
+                    }
+                })
+            }
+            
+            function callWhenMined2(txHash, callback) {
+                web3.eth.getTransactionReceipt(txHash, function(error, rcpt) {
+                    if(error) {
+                        console.error(error);
+                    } else {
+                        if(rcpt == null) {
+                            setTimeout(function() {
+                                callWhenMined2(txHash, callback);
+                            }, 500);
+                        } else {              
+                            //callback();
+                            callback(1, 'investor1');
+                        }
+                    }
+                })
+            }
+            // Gets the token balance
+            function getTokenBalance(id, account) {
+                document.getElementById(id).innerText = contract_instance.getMyInvestorBalance({from: web3.eth.accounts[account]});                   
+            }
+            
+            function buyAdvert(account, url, anzahlTokens) {
+                web3.personal.unlockAccount(web3.eth.accounts[account], 'pwadO9P1m');
+                contract_instance.addAdvert(document.getElementById(url).value, document.getElementById(anzahlTokens).value, {from: web3.eth.accounts[account]}, function(error, result) {
+                        if(error) {
+                            console.error(error);
+                        } else {
+                            var txHash = result;
+                            console.log(txHash);
+                            //callWhenMined(txHash, getTokenBalance('tokenBalance', account));
+                            //callWhenMined(txHash, getTokenBalance);
+                            callWhenMined(txHash, function(error, result) {
+                                document.getElementById('tokenBalance').innerText = contract_instance.getMyInvestorBalance({from: web3.eth.accounts[1]});                   
+                            });
+                            console.log(document.getElementById(anzahlTokens).value);
+                            document.getElementById('angezeigteWerbung').innerText = document.getElementById('url').value;
+                        }
+                });
+            }
+            
+            function clearInput(id) {
+                document.getElementById(id).value = "";
+            }
+        </script>      
+    </head>
+    <body>
+        <h1>FluxCoin</h1>
+        <img src="https://www.openpr.de/images/articles/n/9/n90378140_g.jpg" id="logo" alt="FluxPort Logo">
+        <p class="style">Besitzer: <span id="TokenOwner"></span> (Ethereum-Adresse)</p> 
+        <p class="style">Vermögen: <span id="myBalance"></span> Ether</p>
+        <p class="style">Token-Name: <span id="TokenName"></span></p> 
+        <p class="style">Maximale Menge: <span id="TotalSupply"></span> Tokens</p> 
+        <br>
+        <span id="ueberschriften">
+            <h2>Investoren</h2>
+            <h2 id="kundenUeberschrift">Kunden</h2>
+        </span>
+        <span id="benutzer">
+            <span id="investoren">
+                <button onclick="getBalance(1, 'investor1')">Update balance von Investor 1:</button>
+                <span id="investor1"></span> Ether
 
-<section>
-    <h3>SHARED</h3>
-    <p>Alles was sich User und Investor teilen:</p>
+                <br><span id="transaktion"></span><br>
+                <form action="/action_page.php">
+                    zu kaufende Menge: <input type="text" id="value" name="Tokens" value=""><br> 
+                </form>
+                <button onclick="buyTokens(1)">Submit</button>
+                <button onclick="getTokenBalance('tokenBalance', 1)">Update Token Balance</button>
+                Investor token Balance:<span id="tokenBalance"></span>
 
-</section>
+                <h4>Schalte Werbung:</h4>
+                <form action="/action_page.php">
+                    URL: <input type="text" name="URL" value="" id="url"><br> 
+                    Anzahl FluxCoins: <input type="text" name="token" value="" id="anzahlTokens"><br> 
+                </form>
+                <button onclick="buyAdvert(1, 'url', 'anzahlTokens')">Submit</button>
+            </span>
+<!--            <span id="kunden">
+                <button onclick="getBalance(1, 'investor1')">Update balance von Investor 1:</button>
+                <span id="investor1"></span> Ether
 
-<section>
-    <h3>USER</h3>
-    <p>Alles was vom User ausgeht hier rein:</p>
+                <br><span id="transaktion"></span><br>
+                <form action="/action_page.php">
+                    zu kaufende Menge: <input type="text" id="value_2" name="Tokens" value=""><br> 
+                </form>
+                <button onclick="buyTokens(1)">Submit</button>
+                <button onclick="getTokenBalance('tokenBalance', 1)">Update Token Balance</button>
+                Investor token Balance:<span id="tokenBalance"></span>
 
-</section>
-
-
-
-
-
-
-<!--
-<form action="/action_page.php">
-    Account name: <input type="text" name="AccountName" value=""><br>
-    Password: <input type="password" name="Password" value=""><br>
-</form>
-<button onclick="getBalance()">Submit</button>
--->
-
-
-</body>
+                <h2>Schalte Werbung:</h2>
+                <form action="/action_page.php">
+                    URL: <input type="text" name="URL" value="" id="url_2"><br> 
+                    Anzahl FluxCoins: <input type="text" name="token" value="" id="anzahlTokens"><br> 
+                </form>
+                <button onclick="buyAdvert(1, 'url', 'anzahlTokens')">Submit</button>
+            </span> -->
+        </span>
+        <span id="angezeigteWerbung">Test Werbung</span>
+    </body>
 </html>
