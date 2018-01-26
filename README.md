@@ -7,6 +7,8 @@
 - alles ausführlich testen
 - sinnvolle Kommentare
 - contracts in mehrere dateien trennen?
+- Funktion, die die Advertisement-Liste zurückgibt (Manuel)
+- buy Funktion (Ether wird nicht vom Investor-Account abgezogen)
 
 Web3:
 - Investor-Account erstellen
