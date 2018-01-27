@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9c5c5f73-79c0-4776-831e-6e1273668e87" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol" afterPath="$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Web3Projekt/index.html" afterPath="$PROJECT_DIR$/Web3Projekt/index.html" />
     </list>
@@ -21,8 +20,8 @@
       <file leaf-file-name="FPBeuthToken.sol" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="922">
-              <caret line="300" column="5" lean-forward="true" selection-start-line="300" selection-start-column="5" selection-end-line="300" selection-end-column="5" />
+            <state relative-caret-position="616">
+              <caret line="325" column="1" lean-forward="false" selection-start-line="325" selection-start-column="1" selection-end-line="325" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -32,7 +31,7 @@
         <entry file="file://$PROJECT_DIR$/Web3Projekt/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+              <caret line="19" column="75" lean-forward="false" selection-start-line="19" selection-start-column="75" selection-end-line="19" selection-end-column="75" />
               <folding />
             </state>
           </provider>
@@ -190,12 +189,12 @@
       <workItem from="1516835715568" duration="1258000" />
       <workItem from="1516837046566" duration="474000" />
       <workItem from="1516980431631" duration="901000" />
-      <workItem from="1516981444114" duration="21096000" />
+      <workItem from="1516981444114" duration="22421000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25665000" />
+    <option name="totallyTimeSpent" value="26990000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1503" height="1047" extended-state="0" />
@@ -299,15 +298,15 @@
     <entry file="file://$PROJECT_DIR$/Web3Projekt/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+          <caret line="19" column="75" lean-forward="false" selection-start-line="19" selection-start-column="75" selection-end-line="19" selection-end-column="75" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="922">
-          <caret line="300" column="5" lean-forward="true" selection-start-line="300" selection-start-column="5" selection-end-line="300" selection-end-column="5" />
+        <state relative-caret-position="616">
+          <caret line="325" column="1" lean-forward="false" selection-start-line="325" selection-start-column="1" selection-end-line="325" selection-end-column="1" />
           <folding />
         </state>
       </provider>

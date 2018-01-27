@@ -17,7 +17,7 @@
             //getName();
             //getTotalSupply();
             //getTokenOwner("TokenOwner");
-var balances = contract_instance.balanceOf.call();
+document.getElementById("TotalSupply").innerText = contract_instance.symbol.call();
 
             getTokenOwner("investorOwner1");
             getBalance(1, 'investor1');

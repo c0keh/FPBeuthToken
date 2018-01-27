@@ -293,7 +293,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         balanceOf[owner] += chargedValue / 2;
         adverts[advertId].value -= chargedValue;
 
-        if(adverts[advertId].value == 0 || adverts[advertId].value > previousAdvertValue){
+        if(adverts[advertId].value <= 0 || adverts[advertId].value > previousAdvertValue){
             delete adverts[advertId];
             watchAdvertId++;
         }
@@ -319,6 +319,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         require(userBalance[msg.sender] - value >= 0);
 
         userBalance[msg.sender] -= value;
+        balanceOf[owner] += value;
 
         Shop(msg.sender, value, userBalance[msg.sender]);
     }
