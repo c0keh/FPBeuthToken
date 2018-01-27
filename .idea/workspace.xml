@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9c5c5f73-79c0-4776-831e-6e1273668e87" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol" afterPath="$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Web3Projekt/index.html" afterPath="$PROJECT_DIR$/Web3Projekt/index.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -17,21 +18,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="FPBeuthToken.sol" pinned="false" current-in-tab="false">
+      <file leaf-file-name="FPBeuthToken.sol" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="89">
-              <caret line="281" column="0" lean-forward="true" selection-start-line="281" selection-start-column="0" selection-end-line="281" selection-end-column="0" />
+            <state relative-caret-position="922">
+              <caret line="300" column="5" lean-forward="true" selection-start-line="300" selection-start-column="5" selection-end-line="300" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Web3Projekt/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="935">
-              <caret line="55" column="34" lean-forward="false" selection-start-line="55" selection-start-column="34" selection-end-line="55" selection-end-column="34" />
+            <state relative-caret-position="323">
+              <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -67,8 +68,9 @@
       <find>balance</find>
       <find>getbalan</find>
       <find>besitz</find>
-      <find>buy</find>
       <find>personal</find>
+      <find>buy</find>
+      <find>balanceof</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -79,8 +81,8 @@
       <list>
         <option value="$PROJECT_DIR$/Web3Projekt/node_modules/indexScript.js" />
         <option value="$PROJECT_DIR$/Web3Projekt/indexScript.js" />
-        <option value="$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol" />
         <option value="$PROJECT_DIR$/Web3Projekt/index.html" />
+        <option value="$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol" />
       </list>
     </option>
   </component>
@@ -94,9 +96,9 @@
     <handled-path value="$PROJECT_DIR$/Web3Projekt/node_modules" />
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="-1" />
-    <option name="width" value="1282" />
+    <option name="width" value="1503" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
@@ -188,18 +190,18 @@
       <workItem from="1516835715568" duration="1258000" />
       <workItem from="1516837046566" duration="474000" />
       <workItem from="1516980431631" duration="901000" />
-      <workItem from="1516981444114" duration="18299000" />
+      <workItem from="1516981444114" duration="21096000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22868000" />
+    <option name="totallyTimeSpent" value="25665000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="0" width="1282" height="1047" extended-state="1" />
+    <frame x="-1" y="0" width="1503" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17041801" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1447099" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -294,18 +296,18 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Web3Projekt/indexScript.js" />
-    <entry file="file://$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol">
+    <entry file="file://$PROJECT_DIR$/Web3Projekt/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="281" column="0" lean-forward="true" selection-start-line="281" selection-start-column="0" selection-end-line="281" selection-end-column="0" />
+        <state relative-caret-position="323">
+          <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Web3Projekt/index.html">
+    <entry file="file://$PROJECT_DIR$/FPBeuthTokenTruffleProject/contracts/FPBeuthToken.sol">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="55" column="34" lean-forward="false" selection-start-line="55" selection-start-column="34" selection-end-line="55" selection-end-column="34" />
+        <state relative-caret-position="922">
+          <caret line="300" column="5" lean-forward="true" selection-start-line="300" selection-start-column="5" selection-end-line="300" selection-end-column="5" />
           <folding />
         </state>
       </provider>

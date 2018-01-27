@@ -21,7 +21,7 @@ contract owned {
     }
 }
 
-interface tokenRecipient { function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) public; }
+interface tokenRecipient { function receiveApproval(address _from, uint _value, address _token, bytes _extraData) public; }
 
 contract TokenERC20 {
     // Public variables of the token
@@ -29,17 +29,17 @@ contract TokenERC20 {
     string public symbol;
     uint8 public decimals = 18;
     // 18 decimals is the strongly suggested default, avoid changing it
-    uint256 public totalSupply;
+    uint public totalSupply;
 
     // This creates an array with all balances
-    mapping (address => uint256) public balanceOf;
-    mapping (address => mapping (address => uint256)) public allowance;
+    mapping (address => uint) public balanceOf;
+    mapping (address => mapping (address => uint)) public allowance;
 
     // This generates a public event on the blockchain that will notify clients
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Transfer(address indexed from, address indexed to, uint value);
 
     // This notifies clients about the amount burnt
-    event Burn(address indexed from, uint256 value);
+    event Burn(address indexed from, uint value);
 
     /**
      * Constrctor function
@@ -47,21 +47,21 @@ contract TokenERC20 {
      * Initializes contract with initial supply tokens to the creator of the contract
      */
     function TokenERC20(
-        uint256 initialSupply,
+        uint initialSupply,
         string tokenName,
         string tokenSymbol
     ) public {
-        totalSupply = initialSupply * 10 ** uint256(decimals);  // Update total supply with the decimal amount
+        totalSupply = initialSupply * 10 ** uint(decimals);  // Update total supply with the decimal amount
         balanceOf[msg.sender] = totalSupply;                // Give the creator all initial tokens
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
     }
-    
+
     function getTokenName() public constant returns (string Tokenname) {
          return name;
      }
-     
-     function getTotalSupply() public constant returns (uint256 TotalSupply) {
+
+     function getTotalSupply() public constant returns (uint TotalSupply) {
          return totalSupply;
      }
 
@@ -94,7 +94,7 @@ contract TokenERC20 {
      * @param _to The address of the recipient
      * @param _value the amount to send
      */
-    function transfer(address _to, uint256 _value) public {
+    function transfer(address _to, uint _value) public {
         _transfer(msg.sender, _to, _value);
     }
 
@@ -107,7 +107,7 @@ contract TokenERC20 {
      * @param _to The address of the recipient
      * @param _value the amount to send
      */
-    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+    function transferFrom(address _from, address _to, uint _value) public returns (bool success) {
         require(_value <= allowance[_from][msg.sender]);     // Check allowance
         allowance[_from][msg.sender] -= _value;
         _transfer(_from, _to, _value);
@@ -122,7 +122,7 @@ contract TokenERC20 {
      * @param _spender The address authorized to spend
      * @param _value the max amount they can spend
      */
-    function approve(address _spender, uint256 _value) public
+    function approve(address _spender, uint _value) public
     returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         return true;
@@ -137,7 +137,7 @@ contract TokenERC20 {
      * @param _value the max amount they can spend
      * @param _extraData some extra information to send to the approved contract
      */
-    function approveAndCall(address _spender, uint256 _value, bytes _extraData)
+    function approveAndCall(address _spender, uint _value, bytes _extraData)
     public
     returns (bool success) {
         tokenRecipient spender = tokenRecipient(_spender);
@@ -154,7 +154,7 @@ contract TokenERC20 {
      *
      * @param _value the amount of money to burn
      */
-    function burn(uint256 _value) public returns (bool success) {
+    function burn(uint _value) public returns (bool success) {
         require(balanceOf[msg.sender] >= _value);   // Check if the sender has enough
         balanceOf[msg.sender] -= _value;            // Subtract from the sender
         totalSupply -= _value;                      // Updates totalSupply
@@ -170,7 +170,7 @@ contract TokenERC20 {
      * @param _from the address of the sender
      * @param _value the amount of money to burn
      */
-    function burnFrom(address _from, uint256 _value) public returns (bool success) {
+    function burnFrom(address _from, uint _value) public returns (bool success) {
         require(balanceOf[_from] >= _value);                // Check if the targeted balance is enough
         require(_value <= allowance[_from][msg.sender]);    // Check allowance
         balanceOf[_from] -= _value;                         // Subtract from the targeted balance
@@ -187,19 +187,19 @@ contract TokenERC20 {
 
 contract FPBeuthToken is owned, TokenERC20 {
 
-    uint256 public sellPrice;
-    uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
-    uint256 public emptyAdvertId; // index where free place in array
-    uint256 public watchAdvertId; // index which advert to watch in array
+    uint public sellPrice;
+    uint public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
+    uint public emptyAdvertId; // index where free place in array
+    uint public watchAdvertId; // index which advert to watch in array
 
-    mapping (address => uint256) public userBalance;
-    mapping (uint256 => Advertisement) public adverts;
+    mapping (address => uint) public userBalance;
+    mapping (uint => Advertisement) public adverts;
 
-    event Shop(address indexed from, uint256 value, uint256 newBalance);
-    event Charge(address indexed from, uint256 chargedValue, uint256 newBalance);
-    event AddAdvertisement(address indexed from, uint256 advertId, uint256 value);
+    event Shop(address indexed from, uint value, uint newBalance);
+    event Charge(address indexed from, uint chargedValue, uint newBalance);
+    event AddAdvertisement(address indexed from, uint advertId, uint value);
 
-    function FPBeuthToken(uint256 initialSupply, string tokenName, string tokenSymbol)
+    function FPBeuthToken(uint initialSupply, string tokenName, string tokenSymbol)
     TokenERC20(initialSupply, tokenName, tokenSymbol) public {
         emptyAdvertId = 0;
         watchAdvertId = 0;
@@ -211,22 +211,34 @@ contract FPBeuthToken is owned, TokenERC20 {
     struct Advertisement {
         address adOwner;
         string url;
-        uint256 value;
+        uint value;
     }
 
-    function setSellPrice(uint256 newSellPrice) public onlyOwner{
+    function setSellPrice(uint newSellPrice) public onlyOwner{
         require(newSellPrice > 0);
         sellPrice = newSellPrice;
     }
 
-    function setBuyPrice(uint256 newBuyPrice) public onlyOwner{
+    function setBuyPrice(uint newBuyPrice) public onlyOwner{
         require(newBuyPrice > 0);
         buyPrice = newBuyPrice;
     }
 
+    function getAdvertByIndex(uint index) public constant returns (address owner, string url, uint value){
+        return (adverts[index].adOwner, adverts[index].url, adverts[index].value);
+    }
+
+    function getEmptyAdvertId() public constant returns(uint advertId){
+        return emptyAdvertId;
+    }
+
+    function getWatchAdvertId() public constant returns(uint advertId){
+        return watchAdvertId;
+    }
+
 
     //Der Investor kann für Ether unsere Tokens kaufen
-    function buy() public payable returns (uint256 amount){
+    function buy() public payable returns (uint amount){
         amount = msg.value / buyPrice;                    // calculates the amount
         require(balanceOf[owner] >= amount);               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
@@ -236,7 +248,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     }
 
     //für unseren Fall wahrscheinlich erstmal nicht notwendig
-    function sell(uint256 amount) public returns (uint256 revenue){
+    function sell(uint amount) public returns (uint revenue){
         require(balanceOf[msg.sender] >= amount);         // checks if the sender has enough to sell
         balanceOf[owner] += amount;                        // adds the amount to owner's balance
         balanceOf[msg.sender] -= amount;                  // subtracts the amount from seller's balance
@@ -249,7 +261,7 @@ contract FPBeuthToken is owned, TokenERC20 {
     //Der Investor kauft Werbung; er übergibt einen String mit der Url; damit wird die Werbung gesetzt;
     //Der Wert der Werbung wird von der balanceOf abgezogen und wird der Werbung gutgeschrieben
     //braucht man hier am Ende noch ein Transfer-Event
-    function addAdvert (string advertUrl, uint256 fluxCoins) public returns (uint256 advertId) {
+    function addAdvert (string advertUrl, uint fluxCoins) public returns (uint advertId) {
         require(balanceOf[owner] + fluxCoins > balanceOf[owner]);
         require(balanceOf[msg.sender] >= fluxCoins); //prueft wallet zahlbarkeit automatisch? dann require unnötig
         require(emptyAdvertId + 1 != watchAdvertId);
@@ -259,25 +271,26 @@ contract FPBeuthToken is owned, TokenERC20 {
         emptyAdvertId++;
         balanceOf[msg.sender] -= fluxCoins;
         balanceOf[owner] += fluxCoins;
-        Transfer(msg.sender, owner, fluxCoins);  
+        Transfer(msg.sender, owner, fluxCoins);
 
         AddAdvertisement(msg.sender, advertId, fluxCoins);  // Event beim Hinzufügen
         return advertId;
     }
 
-    function getAdvertValue(uint256 advertId) public constant returns (uint256 value){
+    function getAdvertValue(uint advertId) public constant returns (uint value){
         require(adverts[advertId].adOwner == msg.sender || msg.sender == owner);
         return adverts[advertId].value;
     }
 
-    function charge(uint8 minCharged, uint256 advertId) public {
-        uint256 chargedValue = minCharged * 1;
+    function charge(uint8 minCharged, uint advertId) public {
+        uint chargedValue = minCharged * 1;
         require(chargedValue + userBalance[msg.sender] > userBalance[msg.sender]);
         require(advertId == watchAdvertId);
         require(adverts[watchAdvertId].value > 0);
 
-        uint256 previousAdvertValue = adverts[advertId].value;
-        userBalance[msg.sender] += chargedValue;
+        uint previousAdvertValue = adverts[advertId].value;
+        userBalance[msg.sender] += chargedValue / 2;
+        balanceOf[owner] += chargedValue / 2;
         adverts[advertId].value -= chargedValue;
 
         if(adverts[advertId].value == 0 || adverts[advertId].value > previousAdvertValue){
@@ -287,21 +300,21 @@ contract FPBeuthToken is owned, TokenERC20 {
         Charge(msg.sender, chargedValue, userBalance[msg.sender]);
     }
 
-    function getAdvert() public constant returns (uint256, string) {
+    function getAdvert() public constant returns (uint, string) {
         require(watchAdvertId != emptyAdvertId);
         require(adverts[watchAdvertId].value > 0);
         return (watchAdvertId, adverts[watchAdvertId].url);
     }
 
-    function getMyUserBalance() public constant returns (uint256 coinCount) {
+    function getMyUserBalance() public constant returns (uint coinCount) {
         return userBalance[msg.sender];
     }
 
-    function getMyInvestorBalance() public constant returns (uint256 coinCount) {
+    function getMyInvestorBalance() public constant returns (uint coinCount) {
         return balanceOf[msg.sender];
     }
 
-    function buyGood(uint256 value) public {
+    function buyGood(uint value) public {
         require(userBalance[msg.sender] - value < userBalance[msg.sender]);
         require(userBalance[msg.sender] - value >= 0);
 

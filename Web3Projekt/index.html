@@ -15,9 +15,9 @@
         window.onload=function() {
             //getBalance(0, 'myBalance');
             //getName();
-            getTotalSupply();
+            //getTotalSupply();
             //getTokenOwner("TokenOwner");
-
+var balances = contract_instance.balanceOf.call();
 
             getTokenOwner("investorOwner1");
             getBalance(1, 'investor1');
