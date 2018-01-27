@@ -223,6 +223,10 @@ contract FPBeuthToken is owned, TokenERC20 {
         require(newBuyPrice > 0);
         buyPrice = newBuyPrice;
     }
+    
+    function getAdvertByIndex(uint256 index) public constant returns (address owner, string url, uint256 value){
+        return (adverts[index].adOwner, adverts[index].url, adverts[index].value);
+    }
 
 
     //Der Investor kann für Ether unsere Tokens kaufen
