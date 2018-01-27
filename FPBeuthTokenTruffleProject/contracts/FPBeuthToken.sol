@@ -223,6 +223,22 @@ contract FPBeuthToken is owned, TokenERC20 {
         require(newBuyPrice > 0);
         buyPrice = newBuyPrice;
     }
+    
+    function getBuyPrice() public constant returns (uint256){
+        return buyPrice;
+    }
+    
+    function getAdvertByIndex(uint256 index) public constant returns (address owner, string url, uint256 value){
+        return (adverts[index].adOwner, adverts[index].url, adverts[index].value);
+    }
+    
+    function getEmptyAdvertId() public constant returns(uint256 advertId){
+        return emptyAdvertId;
+    }
+    
+    function getWatchAdvertId() public constant returns(uint256 advertId){
+        return watchAdvertId;
+    }
 
     function getAdvertByIndex(uint index) public constant returns (address owner, string url, uint value){
         return (adverts[index].adOwner, adverts[index].url, adverts[index].value);
