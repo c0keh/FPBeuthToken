@@ -274,8 +274,6 @@ contract FPBeuthToken is owned, TokenERC20 {
         advertId = emptyAdvertId;
         emptyAdvertId++;
         balanceOf[msg.sender] -= fluxCoins;
-        balanceOf[owner] += fluxCoins;
-        Transfer(msg.sender, owner, fluxCoins);  
 
         AddAdvertisement(msg.sender, advertId, fluxCoins);  // Event beim Hinzufügen
         return advertId;
