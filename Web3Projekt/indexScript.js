@@ -27,8 +27,10 @@ window.onload=function() {
 function getFirstAdvertURL() {
     var col = document.getElementsByClassName("col");
     var secondCol = col[col.length - 2];
+    if(secondCol.childNodes[2].nextElementSibling != null) {
+        document.getElementById('testWerbung').src = secondCol.childNodes[2].nextElementSibling.childNodes[1].getElementsByTagName('span')[0].innerHTML;
+    }
     console.log(secondCol.childNodes[2].nextElementSibling.childNodes[1].getElementsByTagName('span')[0].innerHTML);
-    document.getElementById('testWerbung').src = secondCol.childNodes[2].nextElementSibling.childNodes[1].getElementsByTagName('span')[0].innerHTML;
 }
 
 function createLodingAnimation(id) {
@@ -58,6 +60,8 @@ function findAvailableAdverts() {
     for(firstAdvert = contract_instance.watchAdvertId.call(); firstAdvert < contract_instance.emptyAdvertId.call(); firstAdvert++) {
         makeAdvert(web3.toAscii(contract_instance.getAdvertByIndex(firstAdvert)[1]), contract_instance.getAdvertByIndex(firstAdvert)[2]);
     }
+    
+    console.log(firstAdvert < contract_instance.emptyAdvertId.call());
 }
 
 // Gets each accounts data 
@@ -289,6 +293,7 @@ function buyAdvert(account, url, anzahlTokens) {
                     from: web3.eth.accounts[1]
                 });
                 makeAdvert(document.getElementById(url).value, document.getElementById(anzahlTokens).value);
+                getFirstAdvertURL();
             });
         }
     });
@@ -300,7 +305,7 @@ function charge(seconds, advertID) {
     if(radios[1].checked == true) {
         //web3.personal.unlockAccount(web3.eth.accounts[1], 'pwadO9P1m');
         unlockAccount(3, '234567891', true);
-           contract_instance.charge(web3.toHex(seconds), web3.toBigNumber(contract_instance.watchAdvertId.call()), {from: web3.eth.accounts[1], gas:200000
+           contract_instance.charge(web3.toHex(seconds), web3.toBigNumber(contract_instance.watchAdvertId.call()), {from: web3.eth.accounts[3], gas:200000
         }, function (error, result) {
             if (error) {
                 console.error(error);
@@ -320,6 +325,7 @@ function charge(seconds, advertID) {
                         console.log(secondCol.getElementsByClassName('advert')[0]);
                         var firstAdvert = secondCol.getElementsByClassName('advert')[0];
                         secondCol.removeChild(firstAdvert);
+                        getFirstAdvertURL();
                         return;
                     }
                     
@@ -330,7 +336,11 @@ function charge(seconds, advertID) {
                     getAdvertByIndex(contract_instance.watchAdvertId.call());
                     
                     
-                    updateBatteryPercentage(seconds);
+                    getTokenBalance('token' + 3, 3);
+                    console.log(contract_instance.getMyInvestorBalance({from: web3.eth.accounts[3]}));
+                    
+                    
+                    updateBatteryPercentage(seconds, 5);
                     
 
                     //document.getElementById(firstAdvertBatteryLevel).innerText = contract_instance.getAdvertByIndex(contract_instance.watchAdvertId.call())[2];
@@ -374,11 +384,13 @@ function clearInput(id) {
 
 var batteryFull;
 
-function updateBatteryPercentage(seconds) {
-    batteryFull = document.getElementById('newBatteryLevel0').innerText;
+function updateBatteryPercentage(seconds, id) {
+    batteryFull = document.getElementById('newBatteryLevel' + id).innerText;
     var newPercentage = (1 - (seconds / batteryFull)) * 100;
-    document.getElementById('newBatteryLevel0').innerText = batteryFull - seconds;
-    document.getElementById('newBatteryLevel0').style.width = newPercentage + "%";
+    document.getElementById('newBatteryLevel' + id).innerText = batteryFull - seconds;
+    document.getElementById('newBatteryLevel' + id).style.width = newPercentage + "%";
+    
+    console.log(newPercentage + "%");
 }       
 
 function myFunction() {
