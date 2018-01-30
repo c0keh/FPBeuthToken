@@ -13,9 +13,9 @@
         
         <h1 id="TokenName" class="one-third">Name</h1>
         <div class="one-third">    <br><br>
-            <p id="supply">Kompletter Bestand: &nbsp;<span id="totalSupply">999</span> Tokens</p> <br>
-            <p id="supply">Restlicher Bestand: &nbsp;<span id="totalSupply">999</span> Tokens</p> <br>
-            <p id="profit">Gewinn für FluxPort: <span id="totalProfit">999</span> Ether</p>
+            <p id="supply">Kompletter Bestand: &nbsp;<span id="totalSupply">999</span> <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"></p> <br>
+            <p id="supply">Restlicher Bestand: &nbsp;&nbsp;<span id="totalSupply">999</span>  <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"></p> <br>
+            <p id="profit">Gewinn für FluxPort: <span id="totalProfit">999</span>  <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"></p>
         </div>
         <img src="FluxPortLogo.png" alt="FluxPort Logo" id="logo">
         
@@ -23,16 +23,16 @@
             
         <div class="user-display">
             <div class="col">   
-                <h2 class="headline">Investoren</h2>
+                <h2 class="headline">Werbetreibende</h2>
                 
                 <div class="investor">
-                    <h3>Investor 1</h3>
+                    <h3>Werbetreibender 1</h3>
                     <p>Besitzer: <span id="investor1">Besitzer</span></p>
                     <p>Ether: &emsp;<span id="ether1">999</span></p>
                     <p>Tokens: &nbsp;<span id="token1">999</span></p>
                     
                      <form action="/action_page.php">
-                        <p>Kaufe: <input type="text" id="value1" name="Tokens" value="" onkeydown="getBuyPrice('value1', 'etherCost1')"> Tokens für <span id="etherCost1">999</span> Ether</p>
+                        <p>Kaufe: <input type="text" id="value1" name="Tokens" value="" onkeydown="getBuyPrice('value1', 'etherCost1')" class="inputStyle">  <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"> für <span id="etherCost1">999</span> <img src="EtherCoin.png" alt="Ether" class="ether" title="Ether"></p>
                     </form>
                     <button onclick="buyTokens(1)">Bestätigen</button>  <br>
                     
@@ -41,19 +41,19 @@
                     <h4>Schalte Werbung:</h4>
                     <form action="/action_page.php" class="formFormatter">
                         URL: &emsp;<input type="text" name="URL" value="" id="url1"><br> 
-                        Anzahl FluxCoins: <input type="text" name="token" value="" id="tokenAmount1"><br> 
+                        Anzahl FluxCoins: <input type="text" name="token" value="" id="tokenAmount1" class="inputStyle"><br> 
                     </form>
                     <button onclick="buyAdvert(1, 'url1', 'tokenAmount1')">Bestätigen</button>
                 </div>
                     
                 <div class="investor">
-                    <h3>Investor 2</h3>
+                    <h3>Werbetreibender 2</h3>
                     <p>Besitzer: <span id="investor2">Besitzer</span></p>
                     <p>Ether: &emsp;<span id="ether2">999</span></p>
                     <p>Tokens: &nbsp;<span id="token2">999</span></p>
                     
                      <form action="/action_page.php">
-                        <p>Kaufe: <input type="text" id="value2" name="Tokens" value=""> Tokens für <span id="etherCost2">999</span> Ether</p>
+                        <p>Kaufe: <input type="text" id="value2" name="Tokens" value="" class="inputStyle">  <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"> für <span id="etherCost2">999</span> <img src="EtherCoin.png" alt="Ether" class="ether" title="Ether"></p>
                     </form>
                     <button onclick="buyTokens(2)">Bestätigen</button>  <br>
                     
@@ -62,62 +62,21 @@
                     <h4>Schalte Werbung:</h4>
                     <form action="/action_page.php" class="formFormatter">
                         URL: &emsp;<input type="text" name="URL" value="" id="url2"><br> 
-                        Anzahl FluxCoins: <input type="text" name="token" value="" id="tokenAmount2"><br> 
+                        Anzahl FluxCoins: <input type="text" name="token" value="" id="tokenAmount2" class="inputStyle"><br> 
                     </form>
                     <button onclick="buyAdvert(1, 'url', 'anzahlTokens')">Bestätigen</button>
-                    
                     
                 </div>
             </div>
             <div class="col">
                 <h2 class="headline">Werbung</h2>
-<!--                <div class="advert">
-                    <h3>Werbung 1</h3>    
-                    <span class="completeAdvert">
-                        URL: <span id="advertURL1">URL</span>
-                        <div class="battery">
-                            <div id="battery-level1">100%</div>
-                        </div>
-                    </span>
-                    <span class="zeroPercent">0%</span>     &emsp;&emsp;&emsp;
-                    <span id="fullBattery1">100%</span> 
-                </div>
-                
-                
-                 <div class="advert">
-                    <h3>Werbung 2</h3>    
-                    <span class="completeAdvert">
-                        URL: <span id="advertURL2">URL</span>
-                        <div class="battery">
-                            <div id="battery-level2">100%</div>
-                        </div>
-                    </span>
-                    <span class="zeroPercent">0%</span>     &emsp;&emsp;&emsp;
-                    <span id="fullBattery1">100%</span> 
-                </div>
-                
-                
-                <div class="advert">
-                    <h3>Werbung 2</h3>    
-                    <span class="completeAdvert">
-                        URL: <span>URL</span>
-                        <div class="battery">
-                            <div>100%</div>
-                        </div>
-                    </span>
-                    <span class="zeroPercent">0%</span>     &emsp;&emsp;&emsp;
-                    <span>100%</span> 
-                </div>
-                                                                            -->
-                
+
             </div>
             <div class="col">
                 <h2 class="headline">User</h2>
                 <div class="user">
                     <h3>User 1</h3>
-                    <p>Besitzer: <span id="user1">Besitzer</span></p>
-      <!--              <p>Charging: <span id="status1">Online</span></p>       -->
-                    
+                    <p>Besitzer: <span id="user3">Besitzer</span></p>                  
                     <p>Charging:
                         <label class="container offline">Offline
                             <input type="radio" name="charging1" checked="checked">
@@ -128,33 +87,49 @@
                             <span class="checkmark"></span>
                         </label> 
                     </p>
-                    
-                    <p>Tokens: &nbsp;<span id="token111">999</span></p>
+                    <p><span id="token3">999</span> <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"></p>
+                    <p>
+                        <button onclick="buyGoody()">Kaufe Gutschein</button> für 
+                        <select id="selectUser3">
+                            <option value="10"> 10</option>
+                            <option value="25"> 25</option>
+                            <option value="50"> 50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin">
+                    </p>
                 </div> 
                 
                 
                 <div class="user">
                     <h3>User 2</h3>
-                    <p>Besitzer: <span id="user2">Besitzer</span></p>
-      <!--              <p>Charging: <span id="status1">Online</span></p>       -->
-                    
+                    <p>Besitzer: <span id="user4">Besitzer</span></p>
                     <p>Charging:
                         <label class="container offline">Offline
                             <input type="radio" name="charging2" checked="checked">
                             <span class="checkmark"></span>
                         </label>
                         <label class="container online">Online
-                            <input type="radio" name="charging2">
+                            <input type="radio" name="charging2" onclick="myFunction()">
                             <span class="checkmark"></span>
                         </label> 
                     </p>
-                    
-                    <p>Tokens: &nbsp;<span id="token222">999</span></p>
+                    <p><span id="token4">999</span> <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin"></p>
+                     <p>
+                        <button onclick="buyGoody()">Kaufe Gutschein</button> für 
+                        <select id="selectUser4">
+                            <option value="10"> 10</option>
+                            <option value="25"> 25</option>
+                            <option value="50"> 50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <img src="FluxCoin.png" alt="FluxCoin Token" class="fluxCoin" title="FluxCoin">
+                    </p>
                 </div> 
             </div>
         </div>
-
         
+
 <!--        <div id="actualAdvert"><img id="testWerbung" src="https://www.wehrmaker-werbung.de/s/cc_images/cache_2465013088.jpg?t=1458767650" alt="Aktuelle Werbung"></div>      -->
         <div id="actualAdvert"><!--Test Werbung--><img id="testWerbung" src="FluxPort2.jpg" alt="Aktuelle Werbung"></div>
         
