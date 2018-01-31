@@ -191,6 +191,8 @@ contract FPBeuthToken is owned, TokenERC20 {
     uint256 public buyPrice; //für diesen Preis kann der Investor unsere Tokens kaufen
     uint256 public emptyAdvertId; // index where free place in array
     uint256 public watchAdvertId; // index which advert to watch in array
+    uint256 public remainingTokens;
+    uint256 public profit;
 
     mapping (address => uint256) public userBalance;
     mapping (uint256 => Advertisement) public adverts;
@@ -203,8 +205,9 @@ contract FPBeuthToken is owned, TokenERC20 {
     TokenERC20(initialSupply, tokenName, tokenSymbol) public {
         emptyAdvertId = 0;
         watchAdvertId = 0;
-        sellPrice = 1;
-        buyPrice = 1;
+        sellPrice = 100000000000000000;
+        buyPrice = 100000000000000000;
+        remainingTokens = initialSupply;
     }
 
     // Repräsentation einer Werbung
@@ -212,6 +215,8 @@ contract FPBeuthToken is owned, TokenERC20 {
         address adOwner;
         string url;
         uint256 value;
+        uint256 fullValue;
+        uint256 id;
     }
 
     function setSellPrice(uint256 newSellPrice) public onlyOwner{
@@ -228,8 +233,8 @@ contract FPBeuthToken is owned, TokenERC20 {
         return buyPrice;
     }
     
-    function getAdvertByIndex(uint256 index) public constant returns (address owner, string url, uint256 value){
-        return (adverts[index].adOwner, adverts[index].url, adverts[index].value);
+    function getAdvertByIndex(uint256 index) public constant returns (address owner, string url, uint256 value, uint256 fullValue, uint256 id){
+        return (adverts[index].adOwner, adverts[index].url, adverts[index].value, adverts[index].fullValue, adverts[index].id);
     }
     
     function getEmptyAdvertId() public constant returns(uint256 advertId){
@@ -248,6 +253,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         balanceOf[msg.sender] += amount;                  // adds the amount to buyer's balance
         balanceOf[owner] -= amount;                        // subtracts amount from seller's balance
         Transfer(owner, msg.sender, amount);               // execute an event reflecting the change
+        remainingTokens -= amount;
         return amount;                                    // ends function and returns
     }
 
@@ -269,8 +275,7 @@ contract FPBeuthToken is owned, TokenERC20 {
         require(balanceOf[owner] + fluxCoins > balanceOf[owner]);
         require(balanceOf[msg.sender] >= fluxCoins); //prueft wallet zahlbarkeit automatisch? dann require unnötig
         require(emptyAdvertId + 1 != watchAdvertId);
-
-        adverts[emptyAdvertId] = Advertisement({adOwner: msg.sender, url: advertUrl, value: fluxCoins});
+        adverts[emptyAdvertId] = Advertisement({adOwner: msg.sender, url: advertUrl, value: fluxCoins, fullValue: fluxCoins, id: advertId});
         advertId = emptyAdvertId;
         emptyAdvertId++;
         balanceOf[msg.sender] -= fluxCoins;
@@ -299,6 +304,8 @@ contract FPBeuthToken is owned, TokenERC20 {
             delete adverts[advertId];
             watchAdvertId++;
         }
+        remainingTokens += minCharged / 2;
+        profit += minCharged / 2;
         Charge(msg.sender, chargedValue, userBalance[msg.sender]);
     }
 
@@ -322,7 +329,7 @@ contract FPBeuthToken is owned, TokenERC20 {
 
         userBalance[msg.sender] -= value;
         balanceOf[owner] += value;
-
+        remainingTokens += value;
         Shop(msg.sender, value, userBalance[msg.sender]);
     }
 }
